@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout Code') {
             agent { label 'master' }
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/hello-java-docker.git'
+                git branch: 'main', url: 'https://github.com/fahdahmadee072-wq/hello-java-docker.git'
             }
         }
 
