@@ -24,7 +24,7 @@ pipeline {
         stage('Run Application (Docker)') {
             agent {
                 docker {
-                    image 'openjdk:11'
+                    image 'openjdk:11-jdk-slim'
                 }
             }
             steps {
