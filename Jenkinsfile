@@ -1,32 +1,38 @@
 pipeline {
-    agent none
+    agent any
+
+    environment {
+        DOCKERHUB_USER = "fahd81"
+        IMAGE_NAME = "hello-java"
+    }
 
     stages {
         stage('Checkout Code') {
-            agent any
             steps {
                 git branch: 'main', url: 'https://github.com/fahdahmadee072-wq/hello-java-docker.git'
             }
         }
 
-        stage('Build with Maven (Docker)') {
-            agent {
-                docker {
-                    image 'maven:3.8.1-adoptopenjdk-11'
-                }
-            }
+        stage('Build Docker Image') {
             steps {
-                sh 'mvn -version'
-                sh 'mvn clean compile'
+                sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:latest .'
             }
         }
 
-        stage('Build Docker Image') {
-            agent any
+        stage('Login & Push Image') {
             steps {
-                sh '''
-                  docker build -t hello-java:v1 .
-                '''
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
+                    )
+                ]) {
+                    sh '''
+                    echo "$PASS" | docker login -u "$USER" --password-stdin
+                    docker push $DOCKERHUB_USER/$IMAGE_NAME:latest
+                    '''
+                }
             }
         }
     }
