@@ -21,14 +21,12 @@ pipeline {
             }
         }
 
-        stage('Run Application (Docker)') {
-            agent {
-                docker {
-                    image 'eclipse-temurin:11-jdk'
-                }
-            }
+        stage('Build Docker Image') {
+            agent any
             steps {
-                sh 'java -cp target/classes Main'
+                sh '''
+                  docker build -t hello-java:v1 .
+                '''
             }
         }
     }
