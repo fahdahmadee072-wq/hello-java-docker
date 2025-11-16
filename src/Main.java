@@ -1,22 +1,19 @@
-import com.sun.net.httpserver.HttpServer;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
+package com.example;
 
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@EnableAutoConfiguration
 public class Main {
-    public static void main(String[] args) throws IOException {
-        int port = 8080;
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
-        server.createContext("/", exchange -> {
-            String response = "Hello from Java Web Server running inside Docker + Jenkins!";
-            exchange.sendResponseHeaders(200, response.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        });
+    @RequestMapping("/")
+    String home() {
+        return "Hello from Spring Boot in Docker!";
+    }
 
-        server.start();
-        System.out.println("Server started at http://localhost:" + port);
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
     }
 }
