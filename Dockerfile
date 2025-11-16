@@ -4,4 +4,5 @@ WORKDIR /app
 
 COPY target/classes /app
 
-CMD ["java", "Main"]
+CMD ["java", "-cp", "/app", "Main"]
+
