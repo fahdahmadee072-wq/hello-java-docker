@@ -13,6 +13,15 @@ pipeline {
             }
         }
 
+        stage('Build Java Code') {
+            agent {
+                docker { image 'maven:3.8.1-adoptopenjdk-11' }
+            }
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:latest .'
