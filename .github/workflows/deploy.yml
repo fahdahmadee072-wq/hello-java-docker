@@ -37,13 +37,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
 
       - name: Deploy on GCP VM
-        run: |
-          SSH_KEY_PATH=~/.ssh/id_rsa
-          chmod 600 $SSH_KEY_PATH
-          ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no ${{ secrets.GCP_USER }}@${{ secrets.GCP_HOST }} "
-            docker pull ${{ secrets.DOCKER_USERNAME }}/hello-java-app:latest
-            docker stop app || true
-            docker rm app || true
-            docker run -d --name app -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/hello-java-app:latest
+          run: |
+            SSH_KEY_PATH=~/.ssh/id_rsa
+            ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no ${{ secrets.GCP_USER }}@${{ secrets.GCP_HOST }} "
+              docker pull ${{ secrets.DOCKER_USERNAME }}/hello-java-app:latest
+              docker stop app || true
+              docker rm app || true
+              docker run -d --name app -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/hello-java-app:latest
+            "
+
           "
 
